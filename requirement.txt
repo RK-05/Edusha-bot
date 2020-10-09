@@ -1,0 +1,3 @@
+flask
+nginx
+gunicorn3
