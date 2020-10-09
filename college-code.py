@@ -1,9 +1,28 @@
 from flask import Flask, render_template, flash, request,session
-#from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
+
 import mysql.connector
 import sys
 import boto3
 import os
+
+ENDPOINT="edushachat.cpyclmfbbpkm.ap-south-1.rds.amazonaws.com"
+PORT="3306"
+USR="edushacc"
+REGION="ap-south-1"
+DBNAME="edusha"
+os.environ['LIBMYSQL_ENABLE_CLEARTEXT_PLUGIN'] = '1'
+
+#gets the credentials from .aws/credentials
+session = boto3.Session(profile_name='default')
+client = boto3.client('rds')
+
+token = client.generate_db_auth_token(DBHostname=ENDPOINT, Port=PORT, DBUsername=USR, Region=REGION)
+
+try:
+    mydb =  mysql.connector.connect(host=ENDPOINT, user=USR, passwd="edusha_cc", port=PORT, database=DBNAME)
+    mycursor = mydb.cursor()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))          
 
 # App config.
 DEBUG = False
@@ -110,6 +129,3 @@ def Attendence_upload():
             else:
                 return jsonify({"text":"No data avalible"})
     else: return jsonify({"text":"Invalid request"})
-
-if __name__ == "__main__":
-    app.run()
