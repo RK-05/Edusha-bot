@@ -64,9 +64,9 @@ def Attendence_upload():
         try:
             if req['msg'] == 'start':
                 return jsonify({"text":"select from the following category","actions":course_type})
-            if req['msg'] in course_type:
+            elif req['msg'] in course_type:
                 return jsonify({"text":"select from the following category","actions":cat_type})
-            if req['msg'] in cat_type:
+            elif req['msg'] in cat_type:
                 col=[]
                 mycursor = mydb.cursor()
                 sql = """SELECT `name`,ct.`city` FROM `college_list` cl JOIN `basic_college` bc ON cl.`id` = bc.`cId` JOIN `cities` ct ON cl.`cityId` = ct.`id` WHERE cid IN (SELECT cc.collegeId FROM `college_has_course` cc JOIN `course_master` cm ON cc.`courseid`= cm.id JOIN `course_category` ca ON cc.`courseCat` = ca.id JOIN `course_typo` ct ON cm.`courseType`= ct.`id` WHERE ca.`name` = '{}' ) AND ranking>0 ORDER BY ranking LIMIT 10""".format(req['msg'])
@@ -75,6 +75,8 @@ def Attendence_upload():
                 for x in myresult:
                     col.append("{},{}".format(x[0],x[1]))
                 return jsonify({"text":"Top {} college's".format(req['msg']),"actions":col})
+            else:
+                return jsonify({"text":"No data availble"})
         except:
             if (req['msg1'] in course_mn and req['msg2'].upper() in tot_state) and (req['msg3'] in course_type and req['msg4'] in cat_type):
                 if req['msg1'] != 'All' and req['msg2'] != "All":
