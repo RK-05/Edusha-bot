@@ -63,7 +63,7 @@ def Attendence_upload():
         req=request.json
         try:
             if req['msg'] == 'start':
-                return jsonify({"text":"select from the following category","actions":course_type})
+                return jsonify([{"text":"Hello, welcome to edusha."},{"text":"select from the following category","actions":course_type}])
             elif req['msg'] in course_type:
                 return jsonify({"text":"select from the following category","actions":cat_type})
             elif req['msg'] in cat_type:
@@ -111,7 +111,7 @@ def Attendence_upload():
                 myresult = mycursor.fetchall()
                 for x in myresult:
                     course.append(x[0])
-                return jsonify({"text_1":"select from following courses","actions_1":course,"text_2":"select the state","actions_2":tot_state})
+                return jsonify([{"text":"select from following courses","actions":course},{"text":"select the state","actions":tot_state}])
             elif req['msg2'] in ['Facilities','Sports','Top_recruiters']:
                 col_dets=[]
                 if req['msg2'] == 'Top_recruiters':
