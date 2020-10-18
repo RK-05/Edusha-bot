@@ -1,4 +1,6 @@
 from flask import Flask, render_template, flash, request,session
+from chatterbot import ChatBot 
+from chatterbot.trainers import ChatterBotCorpusTrainer 
 
 import mysql.connector
 import sys
@@ -24,6 +26,21 @@ try:
 except Exception as e:
     print("Database connection failed due to {}".format(e))          
 
+chatbot1 = ChatBot(
+    "My ChatterBot",
+    logic_adapters=["chatterbot.logic.BestMatch",])
+  
+# Give a name to the chatbot “corona bot” 
+# and assign a trainer component. 
+#chatbot1=ChatBot('bot') 
+  
+# Create a new trainer for the chatbot 
+trainer = ChatterBotCorpusTrainer(chatbot1) 
+   
+# Now let us train our bot with multipple corpus 
+trainer.train("chatterbot.corpus.english.botprofile","chatterbot.corpus.english.greetings", 
+              "chatterbot.corpus.english.conversations" ,"chatterbot.corpus.english.humor") 
+     
 # App config.
 DEBUG = False
 app = Flask(__name__)
@@ -76,7 +93,8 @@ def Attendence_upload():
                     col.append("{},{}".format(x[0],x[1]))
                 return jsonify({"text":"Top {} college's".format(req['msg']),"actions":col})
             else:
-                return jsonify({"text":"No data availble"})
+                response = chatbot1.get_response(req['msg']) 
+                return jsonify({"text":response})
         except:
             if (req['msg1'] in course_mn and req['msg2'].upper() in tot_state) and (req['msg3'] in course_type and req['msg4'] in cat_type):
                 if req['msg1'] != 'All' and req['msg2'] != "All":
