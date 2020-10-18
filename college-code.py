@@ -84,7 +84,7 @@ def Attendence_upload():
             elif req['type'] == '0':
                 return jsonify([{"text":"Hello there!<br> I am your personal assistant EBO.<br> Let me help you.<br> Please select from suggested actions to proceed","actions":"Contact our team"}])            
             elif req['msg'] in course_type:
-                return jsonify({"text":"select from the following category","actions":cat_type})
+                return jsonify([{"text":"select from the following category","actions":cat_type}])
             elif req['msg'] in cat_type:
                 col=[]
                 mycursor = mydb.cursor()
@@ -93,10 +93,10 @@ def Attendence_upload():
                 myresult = mycursor.fetchall()
                 for x in myresult:
                     col.append("{},{}".format(x[0],x[1]))
-                return jsonify({"text":"Top {} college's".format(req['msg']),"actions":col})
+                return jsonify([{"text":"Top {} college's".format(req['msg']),"actions":col}])
             else:
                 response = chatbot1.get_response(req['msg']) 
-                return jsonify({"text":response})
+                return jsonify([{"text":response}])
         except:
             if (req['msg1'] in course_mn and req['msg2'].upper() in tot_state) and (req['msg3'] in course_type and req['msg4'] in cat_type):
                 if req['msg1'] != 'All' and req['msg2'] != "All":
@@ -104,25 +104,25 @@ def Attendence_upload():
                     sql = "SELECT DISTINCT cl.`name`,cty.`city` FROM `college_has_course` cc JOIN `course_master` cm ON cc.`courseid`= cm.id JOIN `course_category` ca ON cc.`courseCat` = ca.id JOIN `course_typo` ct ON cm.`courseType`= ct.`id` JOIN `college_list` cl on cc.`collegeId`=cl.`id` JOIN `cities` cty ON cl.`cityId` = cty.`id` JOIN `states` st ON cl.`stateId` = st.`id` WHERE ca.`name` = '{}' AND ct.`name`='{}' AND CM.`name` = '{}' AND st.`name` = '{}'".format(req['msg4'],req['msg3'],req['msg1'],req['msg2'])
                     mycursor.execute(sql)
                     college_result = mycursor.fetchall()
-                    return jsonify({"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]})
+                    return jsonify([{"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]}])
                 elif req['msg1'] != 'All' and req['msg2'] == "All":
                     mycursor = mydb.cursor()
                     sql = "SELECT `college_list`.`name`,ct.`city` FROM `college_has_course` JOIN `college_list`  ON `college_has_course`.`collegeId`=`college_list`.`id` JOIN `cities` ct ON `college_list`.`cityId` = ct.`id` WHERE `college_has_course`.`courseid` IN (SELECT id from `course_master` WHERE name='{} ')".format(req['msg1'])
                     mycursor.execute(sql)
                     college_result = mycursor.fetchall()
-                    return jsonify({"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]})
+                    return jsonify([{"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]}])
                 elif req['msg1'] == 'All' and req['msg2'] != "All":
                     mycursor = mydb.cursor()
                     sql="SELECT  DISTINCT cl.`name`,cty.`city` FROM `college_has_course` cc JOIN `course_master` cm ON cc.`courseid`= cm.id JOIN `course_category` ca ON cc.`courseCat` = ca.id JOIN `course_typo` ct ON cm.`courseType`= ct.`id` JOIN `college_list` cl on cc.`collegeId`=cl.`id` JOIN `cities` cty ON cl.`cityId` = cty.`id` JOIN `states` st ON cl.`stateId` = st.`id` WHERE ca.`name` = '{}' AND ct.`name`='{}' AND st.`name` = '{}'".format(req['msg4'],req['msg3'],req['msg2'])
                     mycursor.execute(sql)
                     college_result = mycursor.fetchall()
-                    return jsonify({"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]})
+                    return jsonify([{"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]}])
                 else:
                     mycursor = mydb.cursor()
                     sql="SELECT  DISTINCT cl.`name`,cty.`city` FROM `college_has_course` cc JOIN `course_master` cm ON cc.`courseid`= cm.id JOIN `course_category` ca ON cc.`courseCat` = ca.id JOIN `course_typo` ct ON cm.`courseType`= ct.`id` JOIN `college_list` cl on cc.`collegeId`=cl.`id` JOIN `cities` cty ON cl.`cityId` = cty.`id` JOIN `states` st ON cl.`stateId` = st.`id` WHERE ca.`name` = '{}' AND ct.`name`='{}'".format(req['msg4'],req['msg3'])
                     mycursor.execute(sql)
                     college_result = mycursor.fetchall()
-                    return jsonify({"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]})
+                    return jsonify([{"text":"select from the following college's","actions":['{},{}'.format(i[0],i[1]) for i in college_result]}])
             elif req['msg1'] in course_type and req['msg2'].upper() in cat_type :
                 course=[]
                 mycursor = mydb.cursor()
@@ -147,7 +147,7 @@ def Attendence_upload():
                 for x in mycollegedets:
                     
                     col_dets.append(x[0])
-                return jsonify({"text":"{} in the {} are".format(req['msg2'],req['msg1']),"actions":col_dets}) 
+                return jsonify([{"text":"{} in the {} are".format(req['msg2'],req['msg1']),"actions":col_dets}]) 
             else:
-                return jsonify({"text":"No data avalible"})
-    else: return jsonify({"text":"Invalid request"})
+                return jsonify([{"text":"No data avalible"}])
+    else: return jsonify([{"text":"Invalid request"}])
