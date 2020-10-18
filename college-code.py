@@ -82,7 +82,7 @@ def Attendence_upload():
             if req['msg'] == 'start':
                 return jsonify([{"text":"Hello, welcome to edusha."},{"text":"select from the following category","actions":course_type}])
             elif req['type'] == '0':
-                return jsonify([{"text":"Hello there!<br> I am your personal assistant EBO.<br> Let me help you.<br> Please select from suggested actions to proceed","actions":Contact our team}])            
+                return jsonify([{"text":"Hello there!<br> I am your personal assistant EBO.<br> Let me help you.<br> Please select from suggested actions to proceed","actions":"Contact our team"}])            
             elif req['msg'] in course_type:
                 return jsonify({"text":"select from the following category","actions":cat_type})
             elif req['msg'] in cat_type:
