@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request,session
+from flask import Flask, render_template, flash, request,session,jsonify
 from chatterbot import ChatBot 
 from chatterbot.trainers import ChatterBotCorpusTrainer 
 
