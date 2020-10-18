@@ -80,7 +80,7 @@ def Attendence_upload():
         req=request.json
         try:
             if req['type'] == '0':
-                return jsonify([{"text":"Hello there!<br> I am your personal assistant EBO.<br> Let me help you.<br> Please select from suggested actions to proceed" , "actions": "Contact our team"}])
+                return jsonify([{"text":"Hello there!<br> I am your personal assistant EBO.<br> Let me help you.<br> Please select from suggested actions to proceed" , "actions": ["Contact our team"]}])
         except:    
             try:
                 if req['msg'] in ['FIND COLLEGES','SEARCH COLLEGES']:
