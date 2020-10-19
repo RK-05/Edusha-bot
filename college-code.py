@@ -30,9 +30,6 @@ chatbot1 = ChatBot(
     "My ChatterBot",
     logic_adapters=["chatterbot.logic.BestMatch",])
   
-# Give a name to the chatbot “corona bot” 
-# and assign a trainer component. 
-#chatbot1=ChatBot('bot') 
   
 # Create a new trainer for the chatbot 
 trainer = ChatterBotCorpusTrainer(chatbot1) 
